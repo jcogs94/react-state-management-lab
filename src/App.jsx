@@ -32,7 +32,25 @@ const App = () => {
     <h1>Hello world!</h1>
     <div>
       <h2>Player</h2>
-      <h3>Money: {money}</h3>
+      <ul>
+        <li>Money: {money}</li>
+        <li>
+          <h3>Team</h3>
+          <ul>
+          {team.length === 0 ? (
+            <li><em>Pick some team members!</em></li>
+          ) : (
+            team.map( (fighter, index) => (
+              <Fighter
+                key={index}
+                {...fighter}
+              />
+            ))
+          )}
+          </ul>
+        </li>
+      </ul>
+
     </div>
     <div>
       <h2>Fighters:</h2>
