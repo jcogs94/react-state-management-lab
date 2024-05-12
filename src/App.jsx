@@ -18,25 +18,16 @@ const App = () => {
 
   const updateAgl = (newTeam) => {
     setTotalAgility(newTeam.reduce((total, fighter) => {
-      return total + fighter. agility
-    }))
+      return total + fighter.agility
+    }, 0))
   }
 
-  const handleAddFighter = (fighterName) => {
-    let fighterToAdd
-    
-    // Finds the correc fighter from the dataset
-    zombieFighters.forEach( (fighter) => {
-      if (fighter.name === fighterName) {
-        fighterToAdd = {...fighter}
-      }
-    })
-
+  const handleAddFighter = (fighter) => {
     // If the player has enough money, adds character
     // to party and updates money, else log error
-    if (money >= fighterToAdd.price) {
-      setMoney(mon => mon - fighterToAdd.price)
-      const newTeam = [...team, fighterToAdd]
+    if (money >= fighter.price) {
+      setMoney(mon => mon - fighter.price)
+      const newTeam = [...team, fighter]
       setTeam(newTeam)
       updateStr(newTeam)
       updateAgl(newTeam)
@@ -50,7 +41,7 @@ const App = () => {
   }
   
   return <>
-    <h1>Hello world!</h1>
+    <h1>Hello Reactville!</h1>
     <div>
       <h2>Player</h2>
       <ul>
@@ -66,7 +57,7 @@ const App = () => {
             team.map( (fighter, index) => (
               <li key={index}>
                 <Fighter {...fighter} />
-                <button key={index} onClick={() => handleRemoveFighter(fighter.name)}>Remove</button>
+                <button onClick={() => handleRemoveFighter(fighter.name)}>Remove</button>
               </li>
             ))
           )}
@@ -81,7 +72,7 @@ const App = () => {
         {zombieFighters.map( (fighter, index) => (
           <li key={index}>
             <Fighter {...fighter} />
-            <button onClick={() => handleAddFighter(fighter.name)}>Add to My Team</button>
+            <button onClick={() => handleAddFighter({...fighter})}>Add to My Team</button>
           </li>
         ))}
       </ul>
