@@ -7,7 +7,9 @@ const App = () => {
   const [team, setTeam] = useState([])
   const [money, setMoney] = useState(100)
   const [zombieFighters, setZombieFighters] = useState(fighterData)
-
+  const [totalStrength, setTotalStrength] = useState(0)
+  const [totalAgility, setTotalAgility] = useState(0)
+  
   const handleAddFighter = (fighterName) => {
     let fighterToAdd
     
@@ -21,8 +23,10 @@ const App = () => {
     // If the player has enough money, adds character
     // to party and updates money, else log error
     if (money >= fighterToAdd.price) {
-      setMoney(money - fighterToAdd.price)
+      setMoney(mon => mon - fighterToAdd.price)
       setTeam([...team, fighterToAdd])
+      setTotalStrength(str => str + fighterToAdd.strength)
+      setTotalAgility(agl => agl + fighterToAdd.agility)
     } else {
       console.log('Not enough money')
     }
@@ -34,6 +38,8 @@ const App = () => {
       <h2>Player</h2>
       <ul>
         <li>Money: {money}</li>
+        <li>Total Strength: {totalStrength}</li>
+        <li>Total Agility: {totalAgility}</li>
         <li>
           <h3>Team</h3>
           <ul>
