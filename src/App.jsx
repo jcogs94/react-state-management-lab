@@ -77,9 +77,50 @@ const App = () => {
     }
   ])
 
-  return (
+  let fighterKeys = Object.keys(zombieFighters[0])
+  fighterKeys.splice(0, 1)
+  fighterKeys.splice(-1, 1)
+
+  const handleAddFighter = (fighterName) => {
+    console.log('Fighter to add:', fighterName)
+    
+    let fighterToAdd
+    
+    zombieFighters.forEach( (fighter) => {
+      if (fighter.name === fighterName) {
+        fighterToAdd = {...fighter}
+      }
+    })
+
+    if (money >= fighterToAdd.price) {
+      setMoney(money - fighterToAdd.price)
+      setTeam([...team, fighterToAdd])
+    } else {
+      console.log('Not enough money')
+    }
+  }
+  
+  return <>
     <h1>Hello world!</h1>
-  );
+    <h2>Money: {money}</h2>
+    <div>
+      <h2>Fighters:</h2>
+      <ul>
+        {zombieFighters.map( (fighter, index) => (
+          <li key={index}>
+            <h3>{fighter.name}</h3>
+            <img src={fighter.img} alt={fighter.name} />
+            <ul>
+              {fighterKeys.map( (property, index) => (
+                <li key={index}>{property}: {fighter[property]}</li>
+              ))}
+            </ul>
+            <button onClick={() => handleAddFighter(fighter.name)}>Add to My Team</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </>
 }
 
 export default App
