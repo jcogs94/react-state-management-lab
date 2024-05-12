@@ -10,6 +10,18 @@ const App = () => {
   const [totalStrength, setTotalStrength] = useState(0)
   const [totalAgility, setTotalAgility] = useState(0)
   
+  const updateStr = (newTeam) => {
+    setTotalStrength(newTeam.reduce((total, fighter) => {
+      return total + fighter.strength
+    }, 0))
+  }
+
+  const updateAgl = (newTeam) => {
+    setTotalAgility(newTeam.reduce((total, fighter) => {
+      return total + fighter. agility
+    }))
+  }
+
   const handleAddFighter = (fighterName) => {
     let fighterToAdd
     
@@ -24,12 +36,17 @@ const App = () => {
     // to party and updates money, else log error
     if (money >= fighterToAdd.price) {
       setMoney(mon => mon - fighterToAdd.price)
-      setTeam([...team, fighterToAdd])
-      setTotalStrength(str => str + fighterToAdd.strength)
-      setTotalAgility(agl => agl + fighterToAdd.agility)
+      const newTeam = [...team, fighterToAdd]
+      setTeam(newTeam)
+      updateStr(newTeam)
+      updateAgl(newTeam)
     } else {
       console.log('Not enough money')
     }
+  }
+
+  const handleRemoveFighter = (fighterName) => {
+
   }
   
   return <>
@@ -47,10 +64,10 @@ const App = () => {
             <li><em>Pick some team members!</em></li>
           ) : (
             team.map( (fighter, index) => (
-              <Fighter
-                key={index}
-                {...fighter}
-              />
+              <li key={index}>
+                <Fighter {...fighter} />
+                <button key={index} onClick={() => handleRemoveFighter(fighter.name)}>Remove</button>
+              </li>
             ))
           )}
           </ul>
@@ -63,10 +80,7 @@ const App = () => {
       <ul>
         {zombieFighters.map( (fighter, index) => (
           <li key={index}>
-            <Fighter
-              key={index}
-              {...fighter}
-            />
+            <Fighter {...fighter} />
             <button onClick={() => handleAddFighter(fighter.name)}>Add to My Team</button>
           </li>
         ))}
