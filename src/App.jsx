@@ -6,7 +6,7 @@ import Fighter from "./components/Fighter/Fighter.jsx"
 const App = () => {
   const [team, setTeam] = useState([])
   const [money, setMoney] = useState(100)
-  const [zombieFighters, setZombieFighters] = useState(fighterData)
+  const [zombieFighters, setZombieFighters] = useState([...fighterData])
   const [totalStrength, setTotalStrength] = useState(0)
   const [totalAgility, setTotalAgility] = useState(0)
   
@@ -26,7 +26,7 @@ const App = () => {
     // If the player has enough money, adds character
     // to party and updates money, else log error
     if (money >= fighter.price) {
-      setMoney(mon => mon - fighter.price)
+      setMoney(oldMoney => oldMoney - fighter.price)
       const newTeam = [...team, fighter]
       setTeam(newTeam)
       updateStr(newTeam)
@@ -36,8 +36,13 @@ const App = () => {
     }
   }
 
-  const handleRemoveFighter = (fighterName) => {
-
+  const handleRemoveFighter = (fighterIndex) => {
+    let newTeam = [...team]
+    newTeam.splice(fighterIndex, 1)
+    setMoney(oldMoney => oldMoney + team[fighterIndex].price)
+    setTeam(newTeam)
+    updateStr(newTeam)
+    updateAgl(newTeam)
   }
   
   return <>
@@ -48,23 +53,20 @@ const App = () => {
         <li>Money: {money}</li>
         <li>Total Strength: {totalStrength}</li>
         <li>Total Agility: {totalAgility}</li>
-        <li>
-          <h3>Team</h3>
-          <ul>
-          {team.length === 0 ? (
-            <li><em>Pick some team members!</em></li>
-          ) : (
-            team.map( (fighter, index) => (
-              <li key={index}>
-                <Fighter {...fighter} />
-                <button onClick={() => handleRemoveFighter(fighter.name)}>Remove</button>
-              </li>
-            ))
-          )}
-          </ul>
-        </li>
       </ul>
-
+      <h2>Team</h2>
+      <ul>
+        {team.length === 0 ? (
+          <li><em>Pick some team members!</em></li>
+        ) : (
+          team.map( (fighter, index) => (
+            <li key={index}>
+              <Fighter {...fighter} />
+              <button onClick={() => handleRemoveFighter(index)}>Remove</button>
+            </li>
+          ))
+        )}
+      </ul>
     </div>
     <div>
       <h2>Fighters:</h2>
